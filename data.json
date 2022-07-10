@@ -247,5 +247,311 @@
                 "cost":6
             }
         }
+    ],
+    "guns" : [
+        {
+            "name":"Service Pistol",
+            "range":12,
+            "accuracy":"+1 within 6\"",
+            "damage":"d3+1",
+            "type":"Pistol",
+            "cost":1,
+            "notes":"-"
+        },
+        {
+            "name":"Hand Cannon",
+            "range":12,
+            "accuracy":"-1 over 8\"",
+            "damage":"d3+2",
+            "type":"Pistol",
+            "cost":1.5,
+            "notes":"Knock back 1\""
+        },
+        {
+            "name":"Shotgun",
+            "range":12,
+            "accuracy":"+1 within 6\" -1 over 6\"",
+            "damage":"2d3",
+            "type":"Pistol",
+            "cost":2,
+            "notes":"Knock back 1\""
+        },
+        {
+            "name":"Assault Rifle",
+            "range":30,
+            "accuracy":"-",
+            "damage":"d6",
+            "type":"Rifle",
+            "cost":4,
+            "notes":"Auto Fire within 12\""
+        },
+        {
+            "name":"Laser Rifle",
+            "range":48,
+            "accuracy":"+1 within 15\"",
+            "damage":"d6",
+            "type":"Rifle",
+            "cost":3,
+            "notes":"-"
+        },
+        {
+            "name":"Colony Rifle",
+            "range":30,
+            "accuracy":"-",
+            "damage":"d6",
+            "type":"Rifle",
+            "cost":2,
+            "notes":"-"
+        },
+        {
+            "name":"Blaster Carbine",
+            "range":18,
+            "accuracy":"-",
+            "damage":"d3+1",
+            "type":"Rifle",
+            "cost":3,
+            "notes":"-"
+        },
+        {
+            "name":"Marksman's Rifle",
+            "range":60,
+            "accuracy":"+2 over 12\"",
+            "damage":"d8",
+            "type":"Rifle",
+            "cost":6,
+            "notes":"Bulky"
+        },
+        {
+            "name":"Grenade Launcher",
+            "range":30,
+            "accuracy":"-",
+            "damage":"As grenade",
+            "type":"Explosive",
+            "cost":6,
+            "notes":"Bulky, Launcher"
+        },
+        {
+            "name":"Buzz Bomb A",
+            "range":24,
+            "accuracy":"-1 within 12\"",
+            "damage":"2d6",
+            "type":"Explosive",
+            "cost":20,
+            "notes":"Bulky, Selective Ammo (3)"
+        },
+        {
+            "name":"Buzz Bomb B",
+            "range":24,
+            "accuracy":"-1",
+            "damage":"d4",
+            "type":"Explosive",
+            "cost":20,
+            "notes":"Bulky, Selective Ammo (3), 2\" area of effect"
+        },
+        {
+            "name":"Fury Rifle",
+            "range":24,
+            "accuracy":"-",
+            "damage":"d8+3",
+            "type":"Heavy",
+            "cost":10,
+            "notes":"Bulky, Knock back 2\""
+        },
+        {
+            "name":"Gauss Gun",
+            "range":60,
+            "accuracy":"-1",
+            "damage":"2d6",
+            "type":"Heavy",
+            "cost":16,
+            "notes":"Bulky, Overheat"
+        },
+        {
+            "name":"Rattle Gun",
+            "range":36,
+            "accuracy":"+1 within 12\"",
+            "damage":"d6",
+            "type":"Machine Gun",
+            "cost":8,
+            "notes":"Auto Fire"
+        },
+        {
+            "name":"Plasma Rifle",
+            "range":24,
+            "accuracy":"-",
+            "damage":"d6+2",
+            "type":"Machine Gun",
+            "cost":6,
+            "notes":"Piercing"
+        },
+        {
+            "name":"Hyper Blaster",
+            "range":30,
+            "accuracy":"-",
+            "damage":"d8",
+            "type":"Machine Gun",
+            "cost":10,
+            "notes":"Auto Fire"
+        }
+    ],
+    "melee" : [
+        {
+            "name" : "Bayonet",
+            "accuracy" : "-",
+            "damage" : "d3+1",
+            "notes" : "-",
+            "cost" : 0.5
+        },
+        {
+            "name" : "Boarding Sword",
+            "accuracy" : "+1",
+            "damage" : "d6",
+            "notes" : "-",
+            "cost" : 1
+        },
+        {
+            "name" : "Power Claw",
+            "accuracy" : "-1",
+            "damage" : "d12",
+            "notes" : "-",
+            "cost" : 3
+        },
+        {
+            "name" : "Alien Claws",
+            "accuracy" : "+1",
+            "damage" : "d6+1",
+            "notes" : "-",
+            "cost" : 0
+        },
+        {
+            "name" : "Smash Attack",
+            "accuracy" : "-",
+            "damage" : "d6",
+            "notes" : "Knock back = damage",
+            "cost" : 0
+        },
+        {
+            "name" : "Crushing Bite",
+            "accuracy" : "-1",
+            "damage" : "d8+3",
+            "notes" : "-",
+            "cost" : 0
+        },
+        {
+            "name" : "Robot Punch",
+            "accuracy" : "-",
+            "damage" : "d6",
+            "notes" : "-",
+            "cost" : 0
+        }
+    ],
+    "grenades" : [
+        {
+            "name" : "Frakk",
+            "range" : 8,
+            "accuracy" : "-",
+            "damage" :"d4",
+            "notes": "Small, 2\" area",
+            "cost" : 2
+        },
+        {
+            "name" : "Fog",
+            "range" : 8,
+            "accuracy" : "-",
+            "damage" :"-",
+            "notes": "Fog, Small, 2\" area",
+            "cost" : 2
+        },
+        {
+            "name" : "Anti-armor",
+            "range" : 6,
+            "accuracy" : "-2",
+            "damage" :"d6+3",
+            "notes": "-",
+            "cost" : 4
+        },
+        {
+            "name" : "Shatter",
+            "range" : 0,
+            "accuracy" : "+1",
+            "damage" :"d6+3",
+            "notes": "-",
+            "cost" : 3
+        },
+        {
+            "name" : "Shard",
+            "range" : 8,
+            "accuracy" : "-",
+            "damage" :"d3",
+            "notes": "Small, 3\" area",
+            "cost" : 3
+        }
+    ],
+    "armor" : [
+        {
+            "name" : "Light",
+            "hp" : "+1",
+            "damage reduction" : "-",
+            "movement penalty" : "-",
+            "cost":1
+        },
+        {
+            "name" : "Military",
+            "hp" : "+2",
+            "damage reduction" : "-",
+            "movement penalty" : "-",
+            "cost":3
+        },
+        {
+            "name" : "Exo-armor",
+            "hp" : "+4",
+            "damage reduction" : "1",
+            "movement penalty" : "-1\"",
+            "cost":8
+        }
+    ],
+    "equipmemnt" : [
+        {
+            "name" : "Jump Module",
+            "notes":"Instead of moving normally, the figure may jump up to 18” in a straight line, clearing obstacles up to 6” tall. Make a random direction roll and place the figure half the indicated number of inches in that direction. If this would carry the figure off the table, place them in contact with the table. If they land directly on top of...",
+            "movement penalty" :"-1\"",
+            "cost": 5
+        },
+        {
+            "name" : "Smart Sight",
+            "notes": "Attach to one firearm. +1 Hit bonus.",
+            "movement penalty" :"-1\"",
+            "cost": 6
+        },
+        {
+            "name" : "Med-kit",
+            "notes": "By using the Med-kit instead of another action in the Action Phase, one figure within 3” may recover 2 lost Hit Points.",
+            "movement penalty" :"-1\"",
+            "cost": 6
+        },
+        {
+            "name" : "Stim pack",
+            "notes": "Single-use item. Can be used as a free action when the user is activated in the Action or Firefight Phase. Immediately recover 2 lost Hit Points.",
+            "movement penalty" :"-",
+            "cost": 4
+        },
+        {
+            "name" : "Cyber Boost",
+            "notes": "Single-use item. Can be used as a free action when the user is activated in the Action Phase. The figure may both move and shoot.",
+            "movement penalty" :"-",
+            "cost": 8
+        },
+        {
+            "name" : "Command Link",
+            "notes": "Squaddie only. Add +1 when rolling to regain control of the unit. Non-cumulative.",
+            "movement penalty" :"-",
+            "cost": 5
+        },
+        {
+            "name" : "Target Designator",
+            "notes": "Used as a shooting action. Make a Skill Check to lock on to a target and mark it with a token. For the rest of the game turn, all shots by your force against the target figure receive +1 bonus to hit.",
+            "movement penalty" :"-",
+            "cost": 10
+        }        
     ]
 }
