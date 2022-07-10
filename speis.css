@@ -1,0 +1,8 @@
+@font-face {
+    font-family: "Blazium";
+    src: url("fonts/blazium.ttf");
+}
+
+h2 {
+    font-family: "Blazium", Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
