@@ -510,7 +510,7 @@
             "cost":8
         }
     ],
-    "equipmemnt" : [
+    "equipment" : [
         {
             "name" : "Jump Module",
             "notes":"Instead of moving normally, the figure may jump up to 18” in a straight line, clearing obstacles up to 6” tall. Make a random direction roll and place the figure half the indicated number of inches in that direction. If this would carry the figure off the table, place them in contact with the table. If they land directly on top of...",
