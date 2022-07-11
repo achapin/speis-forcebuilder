@@ -299,10 +299,58 @@ function renderVehicleElement(element)
     dropdown.selectedIndex = element.vehicleType;
     dropdown.onchange = function(){
         element.setVehicleId(dropdown.selectedIndex);
-        console.log("Vehicle type set to " + vehicles[element.vehicleType].name + "with cost" + vehicles[element.vehicleType].cost);
+        element.weaponIds = [];
+        vehicles[element.vehicleType].weapon_mounts.forEach(function(){
+            element.weaponIds.push(-1);
+        })
+        console.log("Vehicle type set to " + vehicles[element.vehicleType].name + "with cost " + vehicles[element.vehicleType].cost);
+        calculateForceCost();
+        renderEntries();
+    }
+    renderVehicleWeapons(element, container);
+    document.getElementById("force").appendChild(container);
+}
+
+function renderVehicleWeapons(element, container)
+{
+    for(var index = 0; index < element.weaponIds.length; index++)
+    {
+        renderVehicleWeaponElement(element, container, index);
+    }
+}
+
+function renderVehicleWeaponElement(loadout, loadoutDiv, index)
+{
+    console.log("rendering vehicle weapon " + index);
+    var dropdown = document.createElement("SELECT");
+    var noneOption = new Option("None", "");
+    dropdown.add(noneOption);
+
+    var selectIndex = 0;
+    for(var gunIndex = 0; gunIndex < guns.length; gunIndex++)
+    {
+        var gun = guns[gunIndex];
+        if(vehicles[loadout.vehicleType].weapon_mounts[index] == "any"
+        || vehicles[loadout.vehicleType].weapon_mounts[index] == gun.type){
+            var option = new Option(gun.name + " (" + gun.cost + ")", gunIndex);
+            dropdown.add(option);
+            if(gunIndex == parseInt(loadout.weaponIds[index]))
+            {
+                selectIndex = dropdown.length - 1;
+            }
+        }
+    }
+    dropdown.selectedIndex = selectIndex;
+    dropdown.onchange = function(){
+        loadout.weaponIds[index] = parseInt(dropdown.value);
+        if(loadout.weaponIds[index] >= 0){
+            console.log("Vehicle Weapon " + index + " set to " + dropdown.value + " : " + guns[loadout.weaponIds[index]].name + " with cost " + guns[loadout.weaponIds[index]].cost);
+        } else {
+            console.log("Vehicle Weapon " + index + " cleared" + dropdown.value);
+        }
         calculateForceCost();
     }
-    document.getElementById("force").appendChild(container);
+    loadoutDiv.appendChild(dropdown);
 }
 
 function addRemoveOption(container, element)
@@ -384,6 +432,7 @@ class SquadEntry extends SpeciesEntry
 class VehicleEntry extends ForceEntry
 {
     #vehicleId = 0;
+    weaponIds = [];
 
     get vehicleType() {
         return this.#vehicleId;
@@ -391,7 +440,13 @@ class VehicleEntry extends ForceEntry
 
     get cost() {
         console.log("current id " + this.#vehicleId + " cost: " + vehicles[this.#vehicleId].cost)
-        return vehicles[this.#vehicleId].cost;
+        var weaponCost = 0;
+        this.weaponIds.forEach(function(weaponId){
+            if(weaponId >= 0){
+                weaponCost += guns[weaponId].cost;
+            }
+        });
+        return vehicles[this.#vehicleId].cost + weaponCost;
     }
 
     setVehicleId(newId) {

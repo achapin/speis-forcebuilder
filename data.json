@@ -17,7 +17,7 @@
             "mobility_type":"Ground",
             "mobility_distance":20,
             "crew":1,
-            "weapon_mounts":["rifle"],
+            "weapon_mounts":["Rifle"],
             "hp":12,
             "dr":2,
             "cost":8
@@ -28,7 +28,7 @@
             "mobility_type":"Drifter",
             "mobility_distance":30,
             "crew":1,
-            "weapon_mounts":["rifle"],
+            "weapon_mounts":["Rifle"],
             "hp":10,
             "dr":2,
             "cost":10
@@ -39,7 +39,7 @@
             "mobility_type":"Drifter",
             "mobility_distance":24,
             "crew":1,
-            "weapon_mounts":["any"],
+            "weapon_mounts":["Rifle"],
             "hp":10,
             "dr":2,
             "cost":14
@@ -50,7 +50,7 @@
             "mobility_type":"Ground",
             "mobility_distance":14,
             "crew":2,
-            "weapon_mounts":["any","rifle"],
+            "weapon_mounts":["any","Rifle"],
             "hp":16,
             "dr":2,
             "cost":24
