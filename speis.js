@@ -6,6 +6,7 @@ var melee = [];
 var armor = [];
 var grenades = [];
 var equipment = [];
+var robots = [];
 
 function getUrl(url){
 	var req = new XMLHttpRequest();
@@ -39,6 +40,7 @@ function dataLoaded(json){
     armor = json.armor;
     grenades = json.grenades;
     equipment = json.equipment;
+    robots = json.robots;
 }
 
 function initialize()
@@ -62,22 +64,29 @@ function calculateForceCost()
 function addCharacter()
 {
     force.push(new CharacterEntry());
-    console.log("Force now has " + force.length + " entries");
-    renderEntries();
-    calculateForceCost();
+    updateForce();
 }
 
 function addSquad()
 {
     force.push(new SquadEntry());
-    console.log("Force now has " + force.length + " entries");
-    renderEntries();
-    calculateForceCost();
+    updateForce();
 }
 
 function addVehicle()
 {
     force.push(new VehicleEntry());
+    updateForce();
+}
+
+function addRobot()
+{
+    force.push(new RobotEntry());
+    updateForce();
+}
+
+function updateForce()
+{
     console.log("Force now has " + force.length + " entries");
     renderEntries();
     calculateForceCost();
@@ -102,6 +111,10 @@ function renderElement(element)
     if(element instanceof VehicleEntry){
         renderVehicleElement(element);
     }
+
+    if(element instanceof RobotEntry){
+        renderRobotElement(element);
+    }
 }
 
 function renderCharacterElement(element)
@@ -118,15 +131,20 @@ function renderSpeciesElement(element, characterType)
 {
     var container = document.createElement("div");
     addRemoveOption(container, element)
+    var name = document.createElement("span");
+    if(characterType == "character")
+    {
+        name.innerHTML = "&#9733; CHARACTER";
+    } else {
+        name.innerHTML = "<strong>&therefore;</strong> SQUAD";
+    }
+    container.appendChild(name);
     var dropdown = document.createElement("SELECT");
     species.forEach(function(specie){
         var option = new Option(specie.name + " (" + specie[characterType].cost + ")", specie.name);
         dropdown.add(option);
     });
     container.appendChild(dropdown);
-    var name = document.createElement("span");
-    name.innerHTML = characterType;
-    container.appendChild(name);
     dropdown.selectedIndex = element.species;
     dropdown.onchange = function(){
         element.setSpecies(dropdown.selectedIndex);
@@ -290,6 +308,9 @@ function renderVehicleElement(element)
 {
     var container = document.createElement("div");
     addRemoveOption(container, element)
+    var label = document.createElement("span");
+    label.innerHTML = "&#127949; VEHICLE";
+    container.appendChild(label);
     var dropdown = document.createElement("SELECT");
     vehicles.forEach(function(vehicle){
         var option = new Option(vehicle.name + " (" + vehicle.cost + ")", vehicle.name);
@@ -351,6 +372,30 @@ function renderVehicleWeaponElement(loadout, loadoutDiv, index)
         calculateForceCost();
     }
     loadoutDiv.appendChild(dropdown);
+}
+
+function renderRobotElement(element)
+{
+    var container = document.createElement("div");
+    addRemoveOption(container, element)
+    var label = document.createElement("span");
+    label.innerHTML = "&#129302; ROBOT";
+    container.appendChild(label);
+    var dropdown = document.createElement("SELECT");
+    robots.forEach(function(robot){
+        var option = new Option(robot.name + " (" + robot.cost + ")", robot.name);
+        dropdown.add(option);
+    });
+    container.appendChild(dropdown);
+    dropdown.selectedIndex = element.robotType;
+    dropdown.onchange = function(){
+        element.setRobotId(dropdown.selectedIndex);
+        console.log("Robot type set to " + robots[element.robotType].name + "with cost " + robots[element.robotType].cost);
+        calculateForceCost();
+        renderEntries();
+    }
+    renderWeaponSection(element, container);
+    document.getElementById("force").appendChild(container);
 }
 
 function addRemoveOption(container, element)
@@ -454,6 +499,26 @@ class VehicleEntry extends ForceEntry
     }
 }
 
+class RobotEntry extends ForceEntry
+{
+    #robotId = 0;
+    weaponIds = ["","",""];
+
+    get robotType() {
+        return this.#robotId;
+    }
+
+    get cost() {
+        var weaponCost = getWeaponsCost(this.weaponIds);
+        console.log("current id " + this.#robotId + " cost: " + robots[this.#robotId].cost + " weapons: " + weaponCost)
+        return robots[this.#robotId].cost + weaponCost;
+    }
+
+    setRobotId(newId) {
+        this.#robotId = newId;
+    }
+}
+
 class Loadout 
 {
     armorId = -1;
@@ -476,24 +541,31 @@ class Loadout
 
         if(this.armorId >= 0) cost += armor[this.armorId].cost;
         if(this.grenadeId >= 0) cost += grenades[this.grenadeId].cost;
-        this.weaponIds.forEach(function(weaponId){
-            console.log("Parsing weapon " + weaponId);
-            if(weaponId != "") {
-                var weaponType = weaponId.split(".")[0];
-                var weaponIndex = weaponId.split(".")[1];
-                if(weaponType == "guns"){
-                    cost += guns[weaponIndex].cost;
-                } else if(weaponType == "melee"){
-                    cost += melee[weaponIndex].cost;
-                } else {
-                    console.log("Unknown weapon type " + weaponType);
-                }
-            }
-        });
+        cost += getWeaponsCost(this.weaponIds);
         this.equipmentIds.forEach(function(equipmentId){
             if(equipmentId >= 0) cost += equipment[equipmentId].cost;
         });
         
         return cost;
     }
+}
+
+function getWeaponsCost(weaponIds)
+{
+    var cost = 0;
+    weaponIds.forEach(function(weaponId){
+        console.log("Parsing weapon " + weaponId);
+        if(weaponId != "") {
+            var weaponType = weaponId.split(".")[0];
+            var weaponIndex = weaponId.split(".")[1];
+            if(weaponType == "guns"){
+                cost += guns[weaponIndex].cost;
+            } else if(weaponType == "melee"){
+                cost += melee[weaponIndex].cost;
+            } else {
+                console.log("Unknown weapon type " + weaponType);
+            }
+        }
+    });
+    return cost;
 }

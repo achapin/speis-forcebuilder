@@ -553,5 +553,25 @@
             "movement penalty" :"-",
             "cost": 10
         }        
+    ],
+    "robots" : [
+        {
+            "name" : "CIM-L",
+            "speed" : 6,
+            "skill_combat":1,
+            "skill_shooting":1,
+            "hp":10,
+            "dr":1,
+            "cost":10
+        },
+        {
+            "name" : "CIM-APP",
+            "speed" : 5,
+            "skill_combat":1,
+            "skill_shooting":1,
+            "hp":15,
+            "dr":2,
+            "cost":15
+        }
     ]
 }
