@@ -130,6 +130,7 @@ function renderSquadElement(element)
 function renderSpeciesElement(element, characterType)
 {
     var container = document.createElement("div");
+    container.classList.add("entry")
     addRemoveOption(container, element)
     var name = document.createElement("span");
     if(characterType == "character")
@@ -159,6 +160,7 @@ function renderLoadoutElement(element, container){
     var loadoutContainer = document.createElement("div");
     element.loadouts.forEach(function(loadout){
         var loadoutDiv = document.createElement("div");
+        loadoutDiv.classList.add("loadout");
         renderArmorSection(loadout, loadoutDiv);
         renderWeaponSection(loadout, loadoutDiv);
         renderGrenadeSection(loadout, loadoutDiv);
@@ -170,9 +172,10 @@ function renderLoadoutElement(element, container){
 
 function renderArmorSection(loadout, loadoutDiv)
 {
+    var section = document.createElement("div");
     var label = document.createElement("span");
     label.innerHTML = "Armor: ";
-    loadoutDiv.appendChild(label);
+    section.appendChild(label);
     var dropdown = document.createElement("SELECT");
     var noneOption = new Option("None", "");
     dropdown.add(noneOption);
@@ -190,18 +193,21 @@ function renderArmorSection(loadout, loadoutDiv)
         }
         calculateForceCost();
     }
-    loadoutDiv.appendChild(dropdown);
+    section.appendChild(dropdown);
+    loadoutDiv.appendChild(section);
 }
 
 function renderWeaponSection(loadout, loadoutDiv)
 {
+    var section = document.createElement("div");
     var label = document.createElement("span");
     label.innerHTML = "Weapons: ";
-    loadoutDiv.appendChild(label);
+    section.appendChild(label);
     for(var index = 0; index < loadout.weaponIds.length; index++)
     {
-        renderWeaponElement(loadout, loadoutDiv, index);
+        renderWeaponElement(loadout, section, index);
     }
+    loadoutDiv.appendChild(section);
 }
 
 function renderWeaponElement(loadout, loadoutDiv, index)
@@ -248,9 +254,10 @@ function renderWeaponElement(loadout, loadoutDiv, index)
 
 function renderGrenadeSection(loadout, loadoutDiv)
 {
+    var section = document.createElement("div");
     var label = document.createElement("span");
     label.innerHTML = "Grenade: ";
-    loadoutDiv.appendChild(label);
+    section.appendChild(label);
     var dropdown = document.createElement("SELECT");
     var noneOption = new Option("None", "");
     dropdown.add(noneOption);
@@ -268,7 +275,8 @@ function renderGrenadeSection(loadout, loadoutDiv)
         }
         calculateForceCost();
     }
-    loadoutDiv.appendChild(dropdown);
+    section.appendChild(dropdown);
+    loadoutDiv.appendChild(section);
 }
 
 function renderEquipmentSection(loadout, loadoutDiv)
@@ -307,6 +315,7 @@ function renderEquipmentElement(loadout, loadoutDiv, index)
 function renderVehicleElement(element)
 {
     var container = document.createElement("div");
+    container.classList.add("entry")
     addRemoveOption(container, element)
     var label = document.createElement("span");
     label.innerHTML = "&#127949; VEHICLE";
@@ -377,6 +386,7 @@ function renderVehicleWeaponElement(loadout, loadoutDiv, index)
 function renderRobotElement(element)
 {
     var container = document.createElement("div");
+    container.classList.add("entry")
     addRemoveOption(container, element)
     var label = document.createElement("span");
     label.innerHTML = "&#129302; ROBOT";

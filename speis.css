@@ -6,3 +6,17 @@
 h2 {
     font-family: "Blazium", Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
+
+.entry {
+    clear: both;
+    padding: 1em;
+}
+
+.entry span{
+    padding-left: .5em;
+    padding-right: .5em;
+}
+
+.loadout {
+    float: left;
+}
