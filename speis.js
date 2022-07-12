@@ -158,6 +158,7 @@ function renderSpeciesElement(element, characterType)
 
 function renderLoadoutElement(element, container){
     var loadoutContainer = document.createElement("div");
+    console.log("Rendering element with " + element.loadouts.length + " loadouts");
     element.loadouts.forEach(function(loadout){
         var loadoutDiv = document.createElement("div");
         loadoutDiv.classList.add("loadout");
@@ -333,12 +334,57 @@ function renderVehicleElement(element)
         vehicles[element.vehicleType].weapon_mounts.forEach(function(){
             element.weaponIds.push(-1);
         })
+        element.includesCrew = false;
+        element.loadouts = [];
         console.log("Vehicle type set to " + vehicles[element.vehicleType].name + "with cost " + vehicles[element.vehicleType].cost);
-        calculateForceCost();
-        renderEntries();
+        updateForce();
     }
     renderVehicleWeapons(element, container);
+
+    renderVehicleCrew(element, container);
+
     document.getElementById("force").appendChild(container);
+}
+
+function renderVehicleCrew(element, container) {
+    var crewSection = document.createElement("div");
+    var crewLabel = document.createElement("span");
+    crewLabel.innerHTML = "Include Crew: "
+    crewSection.appendChild(crewLabel)
+
+    var checkbox = document.createElement("INPUT");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.checked = element.includesCrew;
+    checkbox.onclick = function() {
+        element.includesCrew = checkbox.checked;
+        console.log("Setting has crew to " + checkbox.checked + " " + element.includesCrew)
+        element.loadouts = [];
+        if(element.includesCrew)
+        {
+            for(var crewIndex = 0; crewIndex < vehicles[element.vehicleType].crew; crewIndex++)
+            {
+                element.loadouts.push(new Loadout(false));
+            }
+        }
+        updateForce();
+    }
+    crewSection.appendChild(checkbox);
+    
+    if(element.includesCrew) {
+        var dropdown = document.createElement("SELECT");
+        species.forEach(function(specie){
+            var option = new Option(specie.name + " (" + species[element.crewSpeciesId].crew_costs[(vehicles[element.vehicleType].crew) - 1] + ")", specie.name);
+            dropdown.add(option);
+        });
+        crewSection.appendChild(dropdown);
+        dropdown.selectedIndex = element.crewSpeciesId;
+        dropdown.onchange = function(){
+            element.crewSpeciesId = dropdown.selectedIndex;
+            updateForce();
+        }
+    }
+    renderLoadoutElement(element, crewSection);
+    container.appendChild(crewSection);
 }
 
 function renderVehicleWeapons(element, container)
@@ -488,6 +534,9 @@ class VehicleEntry extends ForceEntry
 {
     #vehicleId = 0;
     weaponIds = [];
+    includesCrew = false;
+    crewSpeciesId = 0;
+    loadouts = [];
 
     get vehicleType() {
         return this.#vehicleId;
