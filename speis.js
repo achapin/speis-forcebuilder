@@ -192,9 +192,17 @@ function renderArmorSection(loadout, loadoutDiv)
         } else {
             console.log("Armor cleared");
         }
-        calculateForceCost();
+        updateForce();
     }
     section.appendChild(dropdown);
+
+    if(loadout.armorId >= 0){
+        var armorInfo = document.createElement("span");
+        var armorEntry = armor[loadout.armorId];
+        armorInfo.innerHTML += "HP: " + armorEntry.hp + " Damage Reduction: " + armorEntry["damage reduction"] + " Movement Penalty: " + armorEntry["movement penalty"];
+        section.appendChild(armorInfo);
+    }
+
     loadoutDiv.appendChild(section);
 }
 
@@ -248,9 +256,25 @@ function renderWeaponElement(loadout, loadoutDiv, index)
             loadout.weaponIds[index] = "melee." + (dropdown.selectedIndex - (guns.length + 1));
         }
         console.log("Weapon " + index + " set to " + loadout.weaponIds[index]);
-        calculateForceCost();
+        updateForce();
     }
+
     loadoutDiv.appendChild(dropdown);
+    
+    if(loadout.weaponIds[index] != "")
+    {
+        var weaponInfo = document.createElement("span");
+        var weaponType = loadout.weaponIds[index].split(".")[0];
+        if(weaponType == "guns")
+        {
+            var weaponEntry = guns[parseInt(loadout.weaponIds[index].split(".")[1])];
+            weaponInfo.innerHTML += " Range: " + weaponEntry["range"] + " Accuracy: " + weaponEntry["accuracy"] + " Damage: " + weaponEntry["damage"] + " Type: " + weaponEntry["type"] +  " Notes: " + weaponEntry["notes"];
+        } else if (weaponType == "melee") {
+            var weaponEntry = melee[parseInt(loadout.weaponIds[index].split(".")[1])];
+            weaponInfo.innerHTML += " Accuracy: " + weaponEntry["accuracy"] + " Damage: " + weaponEntry["damage"] + " Notes: " + weaponEntry["notes"];
+        }
+        loadoutDiv.appendChild(weaponInfo);
+    }
 }
 
 function renderGrenadeSection(loadout, loadoutDiv)
@@ -274,9 +298,17 @@ function renderGrenadeSection(loadout, loadoutDiv)
         } else {
             console.log("Grenade cleared");
         }
-        calculateForceCost();
+        updateForce();
     }
     section.appendChild(dropdown);
+
+    if(loadout.grenadeId >= 0){
+        var grenadeInfo = document.createElement("span");
+        var grenadeEntry = grenades[loadout.grenadeId];
+        grenadeInfo.innerHTML += "Range: " + grenadeEntry["range"] + " Accuracy: " + grenadeEntry["accuracy"] + " Damage: " + grenadeEntry["damage"] + " Notes: " + grenadeEntry["notes"];
+        section.appendChild(grenadeInfo);
+    }
+
     loadoutDiv.appendChild(section);
 }
 
