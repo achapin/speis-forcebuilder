@@ -84,7 +84,8 @@
                 "hp":3,
                 "cost":7
             },
-            "crew_costs":[2,5]
+            "crew_costs":[2,5],
+            "notes":"When rolling to improve Elite Rank in a persistent game, Humans only have to roll equal or above their current Rank to improve."
         },
         {
             "name":"K'Erin",
@@ -102,7 +103,8 @@
                 "hp":3,
                 "cost":7.5
             },
-            "crew_costs":[3,5]
+            "crew_costs":[3,5],
+            "notes":"K'Erin always strike first in each close combat exchange."
         },
         {
             "name":"Precursor",
@@ -120,7 +122,8 @@
                 "hp":3,
                 "cost":7.5
             },
-            "crew_costs":[3,5]
+            "crew_costs":[3,5],
+            "notes":"Add +1 when rolling to regain control of units."
         },
         {
             "name":"Feral",
@@ -138,7 +141,8 @@
                 "hp":3,
                 "cost":7.5
             },
-            "crew_costs":[3,5]
+            "crew_costs":[3,5],
+            "notes":"Units taking cover can be spotted by Ferals within 9\""
         },
         {
             "name":"Soulless",
@@ -156,7 +160,8 @@
                 "hp":4,
                 "cost":9
             },
-            "crew_costs":[3,6]
+            "crew_costs":[3,6],
+            "notes":"All Soulless have 1 point of Damage Reduction, which is added to any received from wearing armor."
         },
         {
             "name":"Engineer",
@@ -174,7 +179,8 @@
                 "hp":3,
                 "cost":7.5
             },
-            "crew_costs":[3,5]
+            "crew_costs":[3,5],
+            "notes":"Engineers add +1 to all Skill Checks."
         },
         {
             "name":"The Swift",
@@ -192,7 +198,8 @@
                 "hp":3,
                 "cost":6.5
             },
-            "crew_costs":[2,4]
+            "crew_costs":[2,4],
+            "notes":"Swift do not take falling damage.\nAnytime a unit (from either side) goes out of control, every Swift unit within 9\" (regardless of line of sight) must roll for Command Confusion."
         },
         {
             "name":"Skulker",
@@ -210,7 +217,8 @@
                 "hp":3,
                 "cost":8
             },
-            "crew_costs":[3,5]
+            "crew_costs":[3,5],
+            "notes":"Skulkers only pay half their movement to cross an obstacle and can double all climbing distances.\nThey pay no movement cost to use doors and only 1\" to climb through windows or holes."
         },
         {
             "name":"Hulker",
@@ -228,7 +236,8 @@
                 "hp":4,
                 "cost":9
             },
-            "crew_costs":[3,6]
+            "crew_costs":[3,6],
+            "notes":"Hulkers inflict +1 Hit Point damage with all close combat strikes.\nIf a Hulker would go out of control for any reason, it will replace the normal action with a CHARGE!"
         },
         {
             "name":"The Swarm",
@@ -513,7 +522,7 @@
     "equipment" : [
         {
             "name" : "Jump Module",
-            "notes":"Instead of moving normally, the figure may jump up to 18” in a straight line, clearing obstacles up to 6” tall. Make a random direction roll and place the figure half the indicated number of inches in that direction. If this would carry the figure off the table, place them in contact with the table. If they land directly on top of...",
+            "notes":"Instead of moving normally, the figure may jump up to 18” in a straight line, clearing obstacles up to 6” tall. Make a random direction roll and place the figure half the indicated number of inches in that direction. If this would carry the figure off the table, place them in contact with the table. If they land directly on top of another figure, both take 1 Hit Point of damage.",
             "movement penalty" :"-1\"",
             "cost": 5
         },

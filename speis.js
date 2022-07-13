@@ -150,8 +150,34 @@ function renderSpeciesElement(element, characterType)
     dropdown.onchange = function(){
         element.setSpecies(dropdown.selectedIndex);
         console.log("Species set to " + species[element.species].name + "with cost" + species[element.species][characterType].cost);
-        calculateForceCost();
+        updateForce();
     }
+    var table = document.createElement("table");
+    var headerRow = table.insertRow(0);
+    var headerCell1 = headerRow.insertCell(0);
+    var headerCell2 = headerRow.insertCell(1);
+    var headerCell3 = headerRow.insertCell(2);
+    var headerCell4 = headerRow.insertCell(3);
+    headerCell1.innerHTML = "Speed";
+    headerCell2.innerHTML = "Combat Skill";
+    headerCell3.innerHTML = "Shooting Skill";
+    headerCell4.innerHTML = "Hit Points";
+    var valueRow = table.insertRow(1);
+    var valueCell1 = valueRow.insertCell(0);
+    var valueCell2 = valueRow.insertCell(1);
+    var valueCell3 = valueRow.insertCell(2);
+    var valueCell4 = valueRow.insertCell(3);
+    valueCell1.innerHTML = species[element.species][characterType].speed+"\"";
+    valueCell2.innerHTML = "+" + species[element.species][characterType].skill_combat;
+    valueCell3.innerHTML = "+" + species[element.species][characterType].skill_shooting;
+    valueCell4.innerHTML = species[element.species][characterType].hp;
+
+    container.appendChild(table);
+
+    var notes = document.createElement("span");
+    notes.innerHTML = species[element.species].notes;
+    container.appendChild(notes);
+
     renderLoadoutElement(element, container);
     document.getElementById("force").appendChild(container);
 }
@@ -260,7 +286,7 @@ function renderWeaponElement(loadout, loadoutDiv, index)
     }
 
     loadoutDiv.appendChild(dropdown);
-    
+
     if(loadout.weaponIds[index] != "")
     {
         var weaponInfo = document.createElement("span");
@@ -268,7 +294,7 @@ function renderWeaponElement(loadout, loadoutDiv, index)
         if(weaponType == "guns")
         {
             var weaponEntry = guns[parseInt(loadout.weaponIds[index].split(".")[1])];
-            weaponInfo.innerHTML += " Range: " + weaponEntry["range"] + " Accuracy: " + weaponEntry["accuracy"] + " Damage: " + weaponEntry["damage"] + " Type: " + weaponEntry["type"] +  " Notes: " + weaponEntry["notes"];
+            weaponInfo.innerHTML += " Range: " + weaponEntry["range"] + "\" Accuracy: " + weaponEntry["accuracy"] + " Damage: " + weaponEntry["damage"] + " Type: " + weaponEntry["type"] +  " Notes: " + weaponEntry["notes"];
         } else if (weaponType == "melee") {
             var weaponEntry = melee[parseInt(loadout.weaponIds[index].split(".")[1])];
             weaponInfo.innerHTML += " Accuracy: " + weaponEntry["accuracy"] + " Damage: " + weaponEntry["damage"] + " Notes: " + weaponEntry["notes"];
@@ -340,9 +366,16 @@ function renderEquipmentElement(loadout, loadoutDiv, index)
         } else {
             console.log("Equipment " + index + " cleared");
         }
-        calculateForceCost();
+        updateForce();
     }
     loadoutDiv.appendChild(dropdown);
+
+    if(loadout.equipmentIds[index] >= 0){
+        var equipmentInfo = document.createElement("span");
+        var equipmentEntry = equipment[loadout.equipmentIds[index]];
+        equipmentInfo.innerHTML += "Movement Penalty: " + equipmentEntry["movement penalty"] + " Notes: " + equipmentEntry["notes"];
+        loadoutDiv.appendChild(equipmentInfo);
+    }
 }
 
 function renderVehicleElement(element)
@@ -417,6 +450,28 @@ function renderVehicleCrew(element, container) {
             element.crewSpeciesId = dropdown.selectedIndex;
             updateForce();
         }
+
+        var table = document.createElement("table");
+        var headerRow = table.insertRow(0);
+        var headerCell1 = headerRow.insertCell(0);
+        var headerCell2 = headerRow.insertCell(1);
+        var headerCell3 = headerRow.insertCell(2);
+        var headerCell4 = headerRow.insertCell(3);
+        headerCell1.innerHTML = "Speed";
+        headerCell2.innerHTML = "Combat Skill";
+        headerCell3.innerHTML = "Shooting Skill";
+        headerCell4.innerHTML = "Hit Points";
+        var valueRow = table.insertRow(1);
+        var valueCell1 = valueRow.insertCell(0);
+        var valueCell2 = valueRow.insertCell(1);
+        var valueCell3 = valueRow.insertCell(2);
+        var valueCell4 = valueRow.insertCell(3);
+        valueCell1.innerHTML = species[element.crewSpeciesId]["squad"].speed+"\"";
+        valueCell2.innerHTML = "+" + species[element.crewSpeciesId]["squad"].skill_combat;
+        valueCell3.innerHTML = "+" + species[element.crewSpeciesId]["squad"].skill_shooting;
+        valueCell4.innerHTML = species[element.crewSpeciesId]["squad"].hp;
+
+        crewSection.appendChild(table);
     }
     renderLoadoutElement(element, crewSection);
     container.appendChild(crewSection);
@@ -459,9 +514,16 @@ function renderVehicleWeaponElement(loadout, loadoutDiv, index)
         } else {
             console.log("Vehicle Weapon " + index + " cleared" + dropdown.value);
         }
-        calculateForceCost();
+        updateForce();
     }
     loadoutDiv.appendChild(dropdown);
+    if(loadout.weaponIds[index] >= 0) 
+    {
+        var weaponInfo = document.createElement("span");
+        var weaponEntry = guns[loadout.weaponIds[index]];
+        weaponInfo.innerHTML += " Range: " + weaponEntry["range"] + "\" Accuracy: " + weaponEntry["accuracy"] + " Damage: " + weaponEntry["damage"] + " Type: " + weaponEntry["type"] +  " Notes: " + weaponEntry["notes"];
+        loadoutDiv.appendChild(weaponInfo);
+    }
 }
 
 function renderRobotElement(element)
