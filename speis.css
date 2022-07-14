@@ -12,11 +12,29 @@ h2 {
     padding: 1em;
 }
 
-.entry span{
+.entry span {
     padding-left: .5em;
     padding-right: .5em;
 }
 
 .loadout {
     float: left;
+}
+
+table{
+    border-spacing: 0px;
+    border: 2px black solid;
+}
+
+td {
+    border: 1px solid;
+    padding-left: .5em;
+    padding-right: .5em;
+    padding-top: .25em;
+    padding-bottom: .25em;
+    text-align: center;
+}
+
+.tableHeader {
+    background-color: rgb(255, 240, 86);
 }

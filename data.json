@@ -50,7 +50,7 @@
             "mobility_type":"Ground",
             "mobility_distance":14,
             "crew":2,
-            "weapon_mounts":["any","Rifle"],
+            "weapon_mounts":["Any","Rifle"],
             "hp":16,
             "dr":2,
             "cost":24
@@ -61,7 +61,7 @@
             "mobility_type":"Ground",
             "mobility_distance":18,
             "crew":2,
-            "weapon_mounts":["any"],
+            "weapon_mounts":["Any"],
             "hp":14,
             "dr":2,
             "cost":18
@@ -254,7 +254,8 @@
                 "skill_shooting":0,
                 "hp":3,
                 "cost":6
-            }
+            },
+            "add_weapon":"melee.3"
         }
     ],
     "guns" : [

@@ -154,6 +154,7 @@ function renderSpeciesElement(element, characterType)
     }
     var table = document.createElement("table");
     var headerRow = table.insertRow(0);
+    headerRow.classList.add("tableHeader");
     var headerCell1 = headerRow.insertCell(0);
     var headerCell2 = headerRow.insertCell(1);
     var headerCell3 = headerRow.insertCell(2);
@@ -185,9 +186,19 @@ function renderSpeciesElement(element, characterType)
 function renderLoadoutElement(element, container){
     var loadoutContainer = document.createElement("div");
     console.log("Rendering element with " + element.loadouts.length + " loadouts");
+    var squaddieId = 0;
+    if(element.loadouts.length > 1){
+        squaddieId = 1;
+    }
     element.loadouts.forEach(function(loadout){
         var loadoutDiv = document.createElement("div");
         loadoutDiv.classList.add("loadout");
+        if(squaddieId > 0){
+            var label = document.createElement("span");
+            label.innerHTML = "Squaddie " + squaddieId;
+            squaddieId++;
+            loadoutDiv.appendChild(label);
+        }
         renderArmorSection(loadout, loadoutDiv);
         renderWeaponSection(loadout, loadoutDiv);
         renderGrenadeSection(loadout, loadoutDiv);
@@ -200,9 +211,7 @@ function renderLoadoutElement(element, container){
 function renderArmorSection(loadout, loadoutDiv)
 {
     var section = document.createElement("div");
-    var label = document.createElement("span");
-    label.innerHTML = "Armor: ";
-    section.appendChild(label);
+    
     var dropdown = document.createElement("SELECT");
     var noneOption = new Option("None", "");
     dropdown.add(noneOption);
@@ -220,33 +229,75 @@ function renderArmorSection(loadout, loadoutDiv)
         }
         updateForce();
     }
-    section.appendChild(dropdown);
 
+    var table = document.createElement("table");
+    var headerRow = table.insertRow(0);
+    headerRow.classList.add("tableHeader");
+    var headerCell1 = headerRow.insertCell(0);
+    var headerCell2 = headerRow.insertCell(1);
+    var headerCell3 = headerRow.insertCell(2);
+    var headerCell4 = headerRow.insertCell(3);
+    headerCell1.innerHTML = "Armor";
+    headerCell2.innerHTML = "HP";
+    headerCell3.innerHTML = "Damage Reduction";
+    headerCell4.innerHTML = "Movement Penalty";
+
+    var valueRow = table.insertRow(1);
+    var valueCell1 = valueRow.insertCell(0);
+    var valueCell2 = valueRow.insertCell(1);
+    var valueCell3 = valueRow.insertCell(2);
+    var valueCell4 = valueRow.insertCell(3);
+
+    valueCell1.appendChild(dropdown);
     if(loadout.armorId >= 0){
-        var armorInfo = document.createElement("span");
         var armorEntry = armor[loadout.armorId];
-        armorInfo.innerHTML += "HP: " + armorEntry.hp + " Damage Reduction: " + armorEntry["damage reduction"] + " Movement Penalty: " + armorEntry["movement penalty"];
-        section.appendChild(armorInfo);
+        valueCell2.innerHTML = armorEntry.hp;
+        valueCell3.innerHTML = armorEntry["damage reduction"];
+        valueCell4.innerHTML = armorEntry["movement penalty"];
     }
 
+    section.appendChild(table);
     loadoutDiv.appendChild(section);
 }
 
 function renderWeaponSection(loadout, loadoutDiv)
 {
     var section = document.createElement("div");
-    var label = document.createElement("span");
-    label.innerHTML = "Weapons: ";
-    section.appendChild(label);
+    var table = document.createElement("table");
+    var headerRow = table.insertRow(0);
+    headerRow.classList.add("tableHeader");
+    var headerCell1 = headerRow.insertCell(0);
+    var headerCell2 = headerRow.insertCell(1);
+    var headerCell3 = headerRow.insertCell(2);
+    var headerCell4 = headerRow.insertCell(3);
+    var headerCell5 = headerRow.insertCell(4);
+    var headerCell6 = headerRow.insertCell(5);
+    headerCell1.innerHTML = "Weapon";
+    headerCell2.innerHTML = "Range";
+    headerCell3.innerHTML = "Accuracy";
+    headerCell4.innerHTML = "Damage";
+    headerCell5.innerHTML = "Type";
+    headerCell6.innerHTML = "Notes";
+
     for(var index = 0; index < loadout.weaponIds.length; index++)
     {
-        renderWeaponElement(loadout, section, index);
+        renderWeaponElement(loadout, table, index);
     }
+
+    section.appendChild(table);
     loadoutDiv.appendChild(section);
 }
 
-function renderWeaponElement(loadout, loadoutDiv, index)
+function renderWeaponElement(loadout, table, index)
 {
+    var valueRow = table.insertRow(index + 1);
+    var valueCell1 = valueRow.insertCell(0);
+    var valueCell2 = valueRow.insertCell(1);
+    var valueCell3 = valueRow.insertCell(2);
+    var valueCell4 = valueRow.insertCell(3);
+    var valueCell5 = valueRow.insertCell(4);
+    var valueCell6 = valueRow.insertCell(5);
+
     var dropdown = document.createElement("SELECT");
     var noneOption = new Option("None", "");
     dropdown.add(noneOption);
@@ -285,30 +336,40 @@ function renderWeaponElement(loadout, loadoutDiv, index)
         updateForce();
     }
 
-    loadoutDiv.appendChild(dropdown);
-
     if(loadout.weaponIds[index] != "")
     {
-        var weaponInfo = document.createElement("span");
         var weaponType = loadout.weaponIds[index].split(".")[0];
         if(weaponType == "guns")
         {
+            valueCell1.appendChild(dropdown);
             var weaponEntry = guns[parseInt(loadout.weaponIds[index].split(".")[1])];
-            weaponInfo.innerHTML += " Range: " + weaponEntry["range"] + "\" Accuracy: " + weaponEntry["accuracy"] + " Damage: " + weaponEntry["damage"] + " Type: " + weaponEntry["type"] +  " Notes: " + weaponEntry["notes"];
+            valueCell2.innerHTML = weaponEntry["range"] + "\"";
+            valueCell3.innerHTML = weaponEntry["accuracy"];
+            valueCell4.innerHTML = weaponEntry["damage"];
+            valueCell5.innerHTML = weaponEntry["type"];
+            valueCell6.innerHTML = weaponEntry["notes"];
         } else if (weaponType == "melee") {
             var weaponEntry = melee[parseInt(loadout.weaponIds[index].split(".")[1])];
-            weaponInfo.innerHTML += " Accuracy: " + weaponEntry["accuracy"] + " Damage: " + weaponEntry["damage"] + " Notes: " + weaponEntry["notes"];
+            if(weaponEntry.cost > 0){
+                valueCell1.appendChild(dropdown);
+            } else {
+                valueCell1.innerHTML = weaponEntry.name;
+            }
+            valueCell2.innerHTML = "-";
+            valueCell3.innerHTML = weaponEntry["accuracy"];
+            valueCell4.innerHTML = weaponEntry["damage"];
+            valueCell5.innerHTML = "Melee";
+            valueCell6.innerHTML = weaponEntry["notes"];
         }
-        loadoutDiv.appendChild(weaponInfo);
+    } else {
+        valueCell1.appendChild(dropdown);
     }
 }
 
 function renderGrenadeSection(loadout, loadoutDiv)
 {
     var section = document.createElement("div");
-    var label = document.createElement("span");
-    label.innerHTML = "Grenade: ";
-    section.appendChild(label);
+    
     var dropdown = document.createElement("SELECT");
     var noneOption = new Option("None", "");
     dropdown.add(noneOption);
@@ -326,30 +387,59 @@ function renderGrenadeSection(loadout, loadoutDiv)
         }
         updateForce();
     }
-    section.appendChild(dropdown);
 
+    var table = document.createElement("table");
+    var headerRow = table.insertRow(0);
+    headerRow.classList.add("tableHeader");
+    var headerCell1 = headerRow.insertCell(0);
+    var headerCell2 = headerRow.insertCell(1);
+    var headerCell3 = headerRow.insertCell(2);
+    var headerCell4 = headerRow.insertCell(3);
+    var headerCell5 = headerRow.insertCell(4);
+    headerCell1.innerHTML = "Grenade";
+    headerCell2.innerHTML = "Range";
+    headerCell3.innerHTML = "Accuracy";
+    headerCell4.innerHTML = "Damage";
+    headerCell5.innerHTML = "Notes";
+    var valueRow = table.insertRow(1);
+    var valueCell1 = valueRow.insertCell(0);
+    var valueCell2 = valueRow.insertCell(1);
+    var valueCell3 = valueRow.insertCell(2);
+    var valueCell4 = valueRow.insertCell(3);
+    var valueCell5 = valueRow.insertCell(4);
+    valueCell1.appendChild(dropdown);
     if(loadout.grenadeId >= 0){
-        var grenadeInfo = document.createElement("span");
         var grenadeEntry = grenades[loadout.grenadeId];
-        grenadeInfo.innerHTML += "Range: " + grenadeEntry["range"] + " Accuracy: " + grenadeEntry["accuracy"] + " Damage: " + grenadeEntry["damage"] + " Notes: " + grenadeEntry["notes"];
-        section.appendChild(grenadeInfo);
+        valueCell2.innerHTML = grenadeEntry.range + "\"";
+        valueCell3.innerHTML = grenadeEntry.accuracy;
+        valueCell4.innerHTML = grenadeEntry.damage;
+        valueCell5.innerHTML = grenadeEntry.notes;
     }
-
+    
+    section.appendChild(table);
     loadoutDiv.appendChild(section);
 }
 
 function renderEquipmentSection(loadout, loadoutDiv)
 {
-    var label = document.createElement("span");
-    label.innerHTML = "Equipment: ";
-    loadoutDiv.appendChild(label);
+    var table = document.createElement("table");
+    var headerRow = table.insertRow(0);
+    headerRow.classList.add("tableHeader");
+    var headerCell1 = headerRow.insertCell(0);
+    var headerCell2 = headerRow.insertCell(1);
+    var headerCell3 = headerRow.insertCell(2);
+    headerCell1.innerHTML = "Equipment";
+    headerCell2.innerHTML = "Movement Penalty";
+    headerCell3.innerHTML = "Notes";
+
     for(var index = 0; index < loadout.equipmentIds.length; index++)
     {
-        renderEquipmentElement(loadout, loadoutDiv, index);
+        renderEquipmentElement(loadout, table, index);
     }
+    loadoutDiv.appendChild(table);
 }
 
-function renderEquipmentElement(loadout, loadoutDiv, index)
+function renderEquipmentElement(loadout, table, index)
 {
     var dropdown = document.createElement("SELECT");
     var noneOption = new Option("None", "");
@@ -368,13 +458,16 @@ function renderEquipmentElement(loadout, loadoutDiv, index)
         }
         updateForce();
     }
-    loadoutDiv.appendChild(dropdown);
 
+    var valueRow = table.insertRow(1);
+    var valueCell1 = valueRow.insertCell(0);
+    var valueCell2 = valueRow.insertCell(1);
+    var valueCell3 = valueRow.insertCell(2);
+    valueCell1.appendChild(dropdown);
     if(loadout.equipmentIds[index] >= 0){
-        var equipmentInfo = document.createElement("span");
         var equipmentEntry = equipment[loadout.equipmentIds[index]];
-        equipmentInfo.innerHTML += "Movement Penalty: " + equipmentEntry["movement penalty"] + " Notes: " + equipmentEntry["notes"];
-        loadoutDiv.appendChild(equipmentInfo);
+        valueCell2.innerHTML = equipmentEntry["movement penalty"]
+        valueCell3.innerHTML = equipmentEntry["notes"];
     }
 }
 
@@ -404,6 +497,43 @@ function renderVehicleElement(element)
         console.log("Vehicle type set to " + vehicles[element.vehicleType].name + "with cost " + vehicles[element.vehicleType].cost);
         updateForce();
     }
+
+    var table = document.createElement("table");
+    var headerRow = table.insertRow(0);
+    headerRow.classList.add("tableHeader");
+    var headerCell1 = headerRow.insertCell(0);
+    var headerCell2 = headerRow.insertCell(1);
+    var headerCell3 = headerRow.insertCell(2);
+    var headerCell4 = headerRow.insertCell(3);
+    var headerCell5 = headerRow.insertCell(4);
+    var headerCell6 = headerRow.insertCell(5);
+    headerCell1.innerHTML = "Type";
+    headerCell2.innerHTML = "Mobility";
+    headerCell3.innerHTML = "Crew";
+    headerCell4.innerHTML = "Weapon Mounts";
+    headerCell5.innerHTML = "Hit Points";
+    headerCell6.innerHTML = "Damage Reduction";
+    var valueRow = table.insertRow(1);
+    var valueCell1 = valueRow.insertCell(0);
+    var valueCell2 = valueRow.insertCell(1);
+    var valueCell3 = valueRow.insertCell(2);
+    var valueCell4 = valueRow.insertCell(3);
+    var valueCell5 = valueRow.insertCell(4);
+    var valueCell6 = valueRow.insertCell(5);
+    valueCell1.innerHTML = vehicles[element.vehicleType].type;
+    valueCell2.innerHTML = vehicles[element.vehicleType].mobility_type + "\n" + vehicles[element.vehicleType].mobility_distance + "\"";
+    valueCell3.innerHTML = vehicles[element.vehicleType].crew;
+    if(vehicles[element.vehicleType].weapon_mounts.length <= 0){
+        valueCell4.innerHTML = "-";
+    } else {
+        vehicles[element.vehicleType].weapon_mounts.forEach(function(mount){
+            valueCell4.innerHTML += "1 " + mount + "\n";
+        })
+    }
+    valueCell5.innerHTML = vehicles[element.vehicleType].hp;
+    valueCell6.innerHTML = vehicles[element.vehicleType].dr;
+    container.appendChild(table);
+
     renderVehicleWeapons(element, container);
 
     renderVehicleCrew(element, container);
@@ -453,6 +583,7 @@ function renderVehicleCrew(element, container) {
 
         var table = document.createElement("table");
         var headerRow = table.insertRow(0);
+        headerRow.classList.add("tableHeader");
         var headerCell1 = headerRow.insertCell(0);
         var headerCell2 = headerRow.insertCell(1);
         var headerCell3 = headerRow.insertCell(2);
@@ -479,15 +610,44 @@ function renderVehicleCrew(element, container) {
 
 function renderVehicleWeapons(element, container)
 {
-    for(var index = 0; index < element.weaponIds.length; index++)
-    {
-        renderVehicleWeaponElement(element, container, index);
+    
+
+    if(element.weaponIds.length > 0){
+        var table = document.createElement("table");
+        var headerRow = table.insertRow(0);
+        headerRow.classList.add("tableHeader");
+        var headerCell1 = headerRow.insertCell(0);
+        var headerCell2 = headerRow.insertCell(1);
+        var headerCell3 = headerRow.insertCell(2);
+        var headerCell4 = headerRow.insertCell(3);
+        var headerCell5 = headerRow.insertCell(4);
+        var headerCell6 = headerRow.insertCell(5);
+        headerCell1.innerHTML = "Weapon";
+        headerCell2.innerHTML = "Range";
+        headerCell3.innerHTML = "Accuracy";
+        headerCell4.innerHTML = "Damage";
+        headerCell5.innerHTML = "Type";
+        headerCell6.innerHTML = "Notes";
+
+        for(var index = 0; index < element.weaponIds.length; index++)
+        {
+            renderVehicleWeaponElement(element, table, index);
+        }
+        container.appendChild(table);
     }
 }
 
-function renderVehicleWeaponElement(loadout, loadoutDiv, index)
+function renderVehicleWeaponElement(loadout, table, index)
 {
     console.log("rendering vehicle weapon " + index);
+    var valueRow = table.insertRow(index + 1);
+    var valueCell1 = valueRow.insertCell(0);
+    var valueCell2 = valueRow.insertCell(1);
+    var valueCell3 = valueRow.insertCell(2);
+    var valueCell4 = valueRow.insertCell(3);
+    var valueCell5 = valueRow.insertCell(4);
+    var valueCell6 = valueRow.insertCell(5);
+
     var dropdown = document.createElement("SELECT");
     var noneOption = new Option("None", "");
     dropdown.add(noneOption);
@@ -496,7 +656,7 @@ function renderVehicleWeaponElement(loadout, loadoutDiv, index)
     for(var gunIndex = 0; gunIndex < guns.length; gunIndex++)
     {
         var gun = guns[gunIndex];
-        if(vehicles[loadout.vehicleType].weapon_mounts[index] == "any"
+        if(vehicles[loadout.vehicleType].weapon_mounts[index] == "Any"
         || vehicles[loadout.vehicleType].weapon_mounts[index] == gun.type){
             var option = new Option(gun.name + " (" + gun.cost + ")", gunIndex);
             dropdown.add(option);
@@ -516,14 +676,17 @@ function renderVehicleWeaponElement(loadout, loadoutDiv, index)
         }
         updateForce();
     }
-    loadoutDiv.appendChild(dropdown);
-    if(loadout.weaponIds[index] >= 0) 
-    {
-        var weaponInfo = document.createElement("span");
+
+    if(loadout.weaponIds[index] >= 0){
         var weaponEntry = guns[loadout.weaponIds[index]];
-        weaponInfo.innerHTML += " Range: " + weaponEntry["range"] + "\" Accuracy: " + weaponEntry["accuracy"] + " Damage: " + weaponEntry["damage"] + " Type: " + weaponEntry["type"] +  " Notes: " + weaponEntry["notes"];
-        loadoutDiv.appendChild(weaponInfo);
+        valueCell2.innerHTML = weaponEntry["range"] + "\"";
+        valueCell3.innerHTML = weaponEntry["accuracy"];
+        valueCell4.innerHTML = weaponEntry["damage"];
+        valueCell5.innerHTML = weaponEntry["type"];
+        valueCell6.innerHTML = weaponEntry["notes"];
     }
+
+    valueCell1.appendChild(dropdown);
 }
 
 function renderRobotElement(element)
@@ -665,7 +828,7 @@ class VehicleEntry extends ForceEntry
 class RobotEntry extends ForceEntry
 {
     #robotId = 0;
-    weaponIds = ["","",""];
+    weaponIds = ["","","","melee.6"];
 
     get robotType() {
         return this.#robotId;
