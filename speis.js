@@ -194,6 +194,7 @@ function renderLoadoutElement(element, container){
         var loadoutDiv = document.createElement("div");
         loadoutDiv.classList.add("loadout");
         if(squaddieId > 0){
+            loadoutDiv.classList.add("squaddie");
             var label = document.createElement("span");
             label.innerHTML = "Squaddie " + squaddieId;
             squaddieId++;

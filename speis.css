@@ -10,6 +10,9 @@ h2 {
 .entry {
     clear: both;
     padding: 1em;
+    border: 1px black solid;
+    margin: .5em;
+    display: table;
 }
 
 .entry span {
@@ -18,12 +21,19 @@ h2 {
 }
 
 .loadout {
-    float: left;
+    display: block;
+}
+
+.squaddie {
+    padding: .5em;
+    border: 1px black solid;
+    margin-top: 1em;
 }
 
 table{
     border-spacing: 0px;
     border: 2px black solid;
+    margin: 1em;
 }
 
 td {
