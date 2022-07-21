@@ -583,5 +583,18 @@
             "dr":2,
             "cost":15
         }
-    ]
+    ],
+    "special_rules" : {
+        "Knock Back" : "Target is knocked directly backwards when hit.",
+        "Auto Fire" : "Weapon uses the Auto Fire rules.",
+        "Piercing" : "Ignore Damage Reduction",
+        "Area of effect" : "Produces a blast with the listed radius.",
+        "Launcher" : "Can fire Frakk, Fog and Shard grenades carried by the gunner.",
+        "Bulky" : "The wielder cannot act in the Firefight Phase.",
+        "Overheat" : "After the weapon fires, place a Heat token by the shooter. If an unmodified hit roll is equal or below the number of Heat tokens, the weapon becomes unusable for the rest of the battle. A Fumble check is not made when an overheat occurs. Heat does not dissipate during the battle.",
+        "Ammo" : "The weapon can only be fired the indicated number of times per battle.",
+        "Selective" : "Each time the weapon fires, select to use either the A or B profiles.",
+        "Small" : "The grenade can be fired through a grenade launcher.",
+        "Fog" : "Place a marker where the shell lands. Blocks sight within the blast area. Each fog cloud rolls 2D6 at the end of every game turn. A 2-5 dissipates."
+    }
 }
