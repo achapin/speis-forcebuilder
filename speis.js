@@ -75,6 +75,16 @@ function openForceWindow() {
             closeForceWindow();
         }
         entry.appendChild(load);
+
+        var deleteForce = document.createElement("button");
+        deleteForce.innerHTML = "Delete";
+        deleteForce.onclick = function() {
+            window.localStorage.removeItem(forceName);
+            directory.splice(directory.indexOf(forceName), 1);
+            forceList.remove(entry);
+        }
+        entry.appendChild(deleteForce);
+
         forceList.appendChild(entry);
     });
 }
@@ -831,6 +841,10 @@ class CharacterEntry extends SpeciesEntry
 {
     constructor(entry){
         super(entry);
+        if(entry == null){
+            this.loadouts.push(new Loadout(true));
+            return;
+        }
         this.speciesId = entry.speciesId;
         this.loadouts = loadLoadouts(entry)
     }
@@ -852,6 +866,12 @@ class SquadEntry extends SpeciesEntry
 {
     constructor(entry){
         super(entry);
+        if(entry == null){
+            this.loadouts.push(new Loadout(false));
+            this.loadouts.push(new Loadout(false));
+            this.loadouts.push(new Loadout(false));
+            return;
+        }
         this.speciesId = entry.speciesId;
         this.loadouts = loadLoadouts(entry)
     }
@@ -883,6 +903,7 @@ class VehicleEntry extends ForceEntry
 
     constructor(entry){
         super(entry);
+        if(entry == null) return;
         this.#vehicleId = entry.vehicleId;
         this.weaponIds = entry.weaponIds;
         this.includesCrew = entry.includesCrew;
@@ -935,6 +956,7 @@ class RobotEntry extends ForceEntry
 
     constructor(entry){
         super(entry);
+        if(entry == null) return;
         this.#robotId = entry.robotId;
         this.weaponIds = entry.weaponIds;
     }
