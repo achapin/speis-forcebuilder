@@ -669,6 +669,10 @@ function renderVehicleCrew(element, container) {
             updateForce();
         }
 
+        var notes = document.createElement("div");
+        notes.innerHTML = species[element.crewSpeciesId].notes;
+        crewSection.appendChild(notes);
+
         var table = document.createElement("table");
         var headerRow = table.insertRow(0);
         headerRow.classList.add("tableHeader");
