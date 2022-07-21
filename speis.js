@@ -81,7 +81,8 @@ function openForceWindow() {
         deleteForce.onclick = function() {
             window.localStorage.removeItem(forceName);
             directory.splice(directory.indexOf(forceName), 1);
-            forceList.remove(entry);
+            window.localStorage.setItem('forceDirectory', JSON.stringify(directory));
+            forceList.removeChild(entry);
         }
         entry.appendChild(deleteForce);
 
