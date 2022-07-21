@@ -13,6 +13,10 @@
     <div id="headerSection">
         <span>Force Cost:</span>
         <span id="forceCost">0</span>
+        <label for="forceName">Force name:</label>
+        <input type="text" id="forceName" name="forceName">
+        <button onclick="saveForce()">Save Force</button>
+        <button onclick="openForceWindow()">Load Force</button>
     </div>
     <div id="add">
         <button onclick="addCharacter()">Add Character</button>
@@ -21,5 +25,12 @@
         <button onclick="addRobot()">Add Robot</button>
     </div>
     <div id="force"></div>
+    <div id="forceWindow" class="hidden">
+        <div>
+            <span>Forces:</span>
+            <button onclick="closeForceWindow()">X</button>
+        </div>
+        <div id="forceList"></div>
+    </div>
 </body>
 </html>

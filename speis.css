@@ -7,6 +7,18 @@ h2 {
     font-family: "Blazium", Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
+#forceWindow {
+    position: fixed;
+    top: 5em;
+    left: 5em;
+    width: 10em;
+    background-color: antiquewhite;
+}
+
 .entry {
     clear: both;
     padding: 1em;

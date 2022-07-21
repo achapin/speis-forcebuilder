@@ -43,6 +43,81 @@ function dataLoaded(json){
     robots = json.robots;
 }
 
+function saveForce() {
+    var directory = JSON.parse(window.localStorage.getItem('forceDirectory'));
+    if(!directory) {
+        directory = [];
+    }
+    var forceName = document.getElementById("forceName").value + " : " + document.getElementById("forceCost").innerHTML;
+    if(directory.indexOf(forceName) < 0){
+        directory.push(forceName);
+    }
+    window.localStorage.setItem('forceDirectory', JSON.stringify(directory));
+    window.localStorage.setItem(forceName, JSON.stringify(force));
+    console.log("force saved as " + forceName);
+}
+
+function openForceWindow() {
+    var forceWindow = document.getElementById("forceWindow");
+    forceWindow.classList.remove("hidden")
+    var directory = JSON.parse(window.localStorage.getItem('forceDirectory'));
+    var forceList = document.getElementById("forceList");
+    forceList.innerHTML = "";
+    directory.forEach(function(forceName) {
+        var entry = document.createElement("div");
+        var name = document.createElement("span");
+        name.innerHTML = forceName;
+        entry.appendChild(name);
+        var load = document.createElement("button");
+        load.innerHTML = "Load";
+        load.onclick = function() {
+            loadForce(forceName);
+            closeForceWindow();
+        }
+        entry.appendChild(load);
+        forceList.appendChild(entry);
+    });
+}
+
+function loadForce(forceName) {
+    force = [];
+    forceJson = JSON.parse(window.localStorage.getItem(forceName));
+    console.log("Force contents:")
+    forceJson.forEach(function(entry) {
+        switch(entry.type){
+            case "character":
+                force.push(new CharacterEntry(entry));
+                break;
+            case "squad":
+                force.push(new SquadEntry(entry));
+                break;
+            case "vehicle":
+                force.push(new VehicleEntry(entry));
+                break;
+            case "robot":
+                force.push(new RobotEntry(entry));
+                break;
+            default:
+                console.log("Couldn't create entry for " + entry.type);
+        }
+    });
+    updateForce();
+}
+
+function closeForceWindow() {
+    forceWindow.classList.add("hidden")
+}
+
+function loadLoadouts(entry) {
+    var loadouts = [];
+    entry.loadouts.forEach(function(loadout) {
+        var newLoadout = new Loadout(false);
+        newLoadout.toObject(loadout);
+        loadouts.push(newLoadout);
+    });
+    return loadouts;
+}
+
 function initialize()
 {
     var upgradeLoadPromise = loadURL("data.json");
@@ -731,10 +806,6 @@ function addRemoveOption(container, element)
 }
 
 class ForceEntry {
-    constructor(id)
-    {
-        this.id = id;
-    }
 
     get cost() {
         return 0;
@@ -745,11 +816,6 @@ class SpeciesEntry extends ForceEntry
 {
     speciesId = 0;
     loadouts = [];
-
-    constructor(id)
-    {
-        super(id);
-    }
 
     get species() {
         return this.speciesId;
@@ -763,23 +829,31 @@ class SpeciesEntry extends ForceEntry
 
 class CharacterEntry extends SpeciesEntry
 {
-    constructor(id){
-        super(id);
-        this.loadouts.push(new Loadout(true));
+    constructor(entry){
+        super(entry);
+        this.speciesId = entry.speciesId;
+        this.loadouts = loadLoadouts(entry)
     }
 
     get cost(){
         return species[this.speciesId].character.cost + this.loadouts[0].cost;
     }
+
+    toJSON() {
+        return {
+            type: "character",
+            speciesId: this.speciesId,
+            loadouts: this.loadouts
+        }
+    }
 }
 
 class SquadEntry extends SpeciesEntry
 {
-    constructor(id){
-        super(id);
-        this.loadouts.push(new Loadout(false));
-        this.loadouts.push(new Loadout(false));
-        this.loadouts.push(new Loadout(false));
+    constructor(entry){
+        super(entry);
+        this.speciesId = entry.speciesId;
+        this.loadouts = loadLoadouts(entry)
     }
 
     get cost(){
@@ -788,6 +862,14 @@ class SquadEntry extends SpeciesEntry
             loadoutCost += loadout.cost;
         })
         return species[this.speciesId].squad.cost + loadoutCost;
+    }
+
+    toJSON() {
+        return {
+            type: "squad",
+            speciesId: this.speciesId,
+            loadouts: this.loadouts
+        }
     }
 }
 
@@ -798,6 +880,15 @@ class VehicleEntry extends ForceEntry
     includesCrew = false;
     crewSpeciesId = 0;
     loadouts = [];
+
+    constructor(entry){
+        super(entry);
+        this.#vehicleId = entry.vehicleId;
+        this.weaponIds = entry.weaponIds;
+        this.includesCrew = entry.includesCrew;
+        this.crewSpeciesId = entry.crewSpeciesId;
+        this.loadouts = loadLoadouts(entry);
+    }
 
     get vehicleType() {
         return this.#vehicleId;
@@ -824,12 +915,29 @@ class VehicleEntry extends ForceEntry
     setVehicleId(newId) {
         this.#vehicleId = newId;
     }
+
+    toJSON() {
+        return {
+            type: "vehicle",
+            vehicleId: this.#vehicleId,
+            weaponIds: this.weaponIds,
+            includesCrew: this.includesCrew,
+            crewSpeciesId: this.crewSpeciesId,
+            loadouts: this.loadouts
+        }
+    }
 }
 
 class RobotEntry extends ForceEntry
 {
     #robotId = 0;
     weaponIds = ["","","","melee.6"];
+
+    constructor(entry){
+        super(entry);
+        this.#robotId = entry.robotId;
+        this.weaponIds = entry.weaponIds;
+    }
 
     get robotType() {
         return this.#robotId;
@@ -843,6 +951,14 @@ class RobotEntry extends ForceEntry
 
     setRobotId(newId) {
         this.#robotId = newId;
+    }
+
+    toJSON() {
+        return {
+            type: "robot",
+            robotId: this.#robotId,
+            weaponIds: this.weaponIds
+        }
     }
 }
 
@@ -861,6 +977,13 @@ class Loadout
             this.weaponIds = ["",""];
             this.equipmentIds = [-1];
         }
+    }
+
+    toObject(entry){
+        this.armorId = entry.armorId;
+        this.weaponIds = entry.weaponIds;
+        this.grenadeId = entry.grenadeId;
+        this.equipmentIds = entry.equipmentIds;
     }
 
     get cost(){
