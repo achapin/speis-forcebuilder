@@ -65,6 +65,7 @@ function openForceWindow() {
     forceList.innerHTML = "";
     directory.forEach(function(forceName) {
         var entry = document.createElement("div");
+        entry.classList.add("forceEntry")
         var name = document.createElement("span");
         name.innerHTML = forceName;
         entry.appendChild(name);
